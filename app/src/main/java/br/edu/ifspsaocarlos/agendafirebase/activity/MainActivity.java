@@ -40,8 +40,7 @@ import br.edu.ifspsaocarlos.agendafirebase.adapter.ContatoAdapter;
 import br.edu.ifspsaocarlos.agendafirebase.model.Contato;
 
 
-public class MainActivity extends AppCompatActivity{
-
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
@@ -142,10 +141,6 @@ public class MainActivity extends AppCompatActivity{
 
         updateUI(null);
         setupRecyclerView();
-
-
-
-
     }
 
     @Override
@@ -210,8 +205,6 @@ public class MainActivity extends AppCompatActivity{
                 .show();
     }
 
-
-
     private void updateUI(String nomeContato)
     {
 
@@ -226,14 +219,10 @@ public class MainActivity extends AppCompatActivity{
 
             empty.setText(getResources().getString(R.string.lista_vazia));
             fab.show();
-        }
-        else {
-
+        } else {
 
              //EXERCICIO: insira aqui o código para buscar somente os contatos que atendam
             //           ao criterio de busca digitado pelo usuário na SearchView.
-
-
 
         }
 

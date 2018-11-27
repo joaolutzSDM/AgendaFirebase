@@ -13,9 +13,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import br.edu.ifspsaocarlos.agendafirebase.model.Contato;
 import br.edu.ifspsaocarlos.agendafirebase.R;
 
-
-
-
 public class ContatoAdapter extends FirebaseRecyclerAdapter<Contato,ContatoAdapter.ContatoViewHolder> {
 
     private static ItemClickListener clickListener;

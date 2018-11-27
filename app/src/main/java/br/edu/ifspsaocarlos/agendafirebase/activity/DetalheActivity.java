@@ -114,28 +114,22 @@ public class DetalheActivity extends AppCompatActivity {
         String fone = ((EditText) findViewById(R.id.editTextFone)).getText().toString();
         String email = ((EditText) findViewById(R.id.editTextEmail)).getText().toString();
 
-        if (c==null) {
+        if (c == null) {
             c = new Contato();
-
-            c.setNome(name);
-            c.setFone(fone);
-            c.setEmail(email);
-            databaseReference.push().setValue(c);
-
         }
-        else
-        {
-            c.setNome(name);
-            c.setFone(fone);
-            c.setEmail(email);
 
+        c.setNome(name);
+        c.setFone(fone);
+        c.setEmail(email);
+
+        if(c == null) {
+            databaseReference.push().setValue(c);
+        } else {
             databaseReference.child(FirebaseID).setValue(c);
-
-
         }
 
         Intent resultIntent = new Intent();
-        setResult(RESULT_OK,resultIntent);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 }
