@@ -21,6 +21,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,10 +61,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!searchView.isIconified()) {
-
             searchView.onActionViewCollapsed();
-            updateUI(null);
-
+            updateUI(null, null);
         } else {
             super.onBackPressed();
         }
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            updateUI(query);
+            updateUI(query, null);
             searchView.clearFocus();
 
         }
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateUI(null);
+        updateUI(null, null);
         setupRecyclerView();
     }
 
@@ -161,22 +160,37 @@ public class MainActivity extends AppCompatActivity {
                     searchView.onActionViewCollapsed();
 
                 searchView.setQuery("", false);
-
-                updateUI(null);
-
+                updateUI(null, null);
             }
         });
 
-
-
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
         searchView.setIconifiedByDefault(true);
-
-
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.todos:
+                updateUI(null, null);
+                return true;
+            case R.id.amigos:
+                updateUI(null, "Amigo");
+                return true;
+            case R.id.familia:
+                updateUI(null, "Família");
+                return true;
+            case R.id.trabalho:
+                updateUI(null, "Trabalho");
+                return true;
+            case R.id.outro:
+                updateUI(null, "Outro");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -185,8 +199,6 @@ public class MainActivity extends AppCompatActivity {
                 showSnackBar(getResources().getString(R.string.contato_adicionado));
 
             }
-
-
 
         if (requestCode == 2) {
             if (resultCode == RESULT_OK)
@@ -205,32 +217,27 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void updateUI(String nomeContato)
+    private void updateUI(String nomeContato, String tipoContato)
     {
-
-        if (nomeContato==null) {
-             query= databaseReference.orderByChild("nome");
-             options = new FirebaseRecyclerOptions.Builder<Contato>().setQuery(query, Contato.class).build();
-
-            adapter = new ContatoAdapter(options);
-            recyclerView.setAdapter(adapter);
-            adapter.startListening();
-
-
-            empty.setText(getResources().getString(R.string.lista_vazia));
-            fab.show();
+        if (nomeContato == null && tipoContato == null) {
+            query = databaseReference.orderByChild("nome");
         } else {
-
-             //EXERCICIO: insira aqui o código para buscar somente os contatos que atendam
-            //           ao criterio de busca digitado pelo usuário na SearchView.
-
+            if(tipoContato == null) {
+                query = databaseReference.orderByChild("nome").startAt(nomeContato).endAt(nomeContato.concat("\uf8ff"));
+            } else {
+                query = databaseReference.orderByChild("tipoContato").equalTo(tipoContato);
+            }
         }
 
-     }
+        options = new FirebaseRecyclerOptions.Builder<Contato>().setQuery(query, Contato.class).build();
+        adapter = new ContatoAdapter(options);
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+        empty.setText(getResources().getString(R.string.lista_vazia));
+        fab.show();
+    }
 
     private void setupRecyclerView() {
-
-
         adapter.setClickListener(new ContatoAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -239,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, 2);
             }
         });
-
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override

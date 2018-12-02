@@ -8,6 +8,7 @@
     <string name="nome">Nome</string>
     <string name="fone">Fone</string>
     <string name="email">Email</string>
+    <string name="tipoContato">Tipo de contato</string>
     <string name="lista_vazia">Lista de contatos vazia</string>
     <string name="contato_nao_encontrado">Contato não encontrado</string>
     <string name="contato_adicionado">Contato adicionado</string>
